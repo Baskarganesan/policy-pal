@@ -29,11 +29,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "PolicyLens — Insurance Policy Q&A" },
+      {
+        name: "description",
+        content:
+          "Upload insurance policies and get clause-cited answers grounded in your documents. NotebookLM-style RAG for P&C insurance.",
+      },
+      { name: "author", content: "PolicyLens" },
+      { property: "og:title", content: "PolicyLens — Insurance Policy Q&A" },
+      {
+        property: "og:description",
+        content: "Clause-cited answers from your uploaded insurance policies.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
