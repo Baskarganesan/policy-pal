@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useId, useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { FileText, X } from "lucide-react";
 import { DocSidebar } from "@/components/policy/DocSidebar";
@@ -30,6 +30,18 @@ function Index() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [mobileInspectorOpen, setMobileInspectorOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputId = useId();
+
+  const openFilePicker = useCallback(() => {
+    const el = fileInputRef.current;
+    if (!el) return;
+    try {
+      el.value = "";
+      el.click();
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const isReady = docs.some((d) => d.status === "ready");
 
@@ -197,10 +209,12 @@ function Index() {
       <Toaster richColors position="top-center" />
       <input
         ref={fileInputRef}
+        id={fileInputId}
         type="file"
         accept=".pdf,.docx,.txt"
         multiple
-        className="hidden"
+        className="sr-only"
+        style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
         onChange={(e) => {
           handleFiles(e.target.files);
           e.target.value = "";
@@ -215,19 +229,20 @@ function Index() {
           </div>
           <span className="text-sm font-semibold">PolicyLens</span>
         </div>
-        <button
-          onClick={() => fileInputRef.current?.click()}
+        <label
+          htmlFor={fileInputId}
+          onClick={openFilePicker}
           className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
         >
           + Policy
-        </button>
+        </label>
       </header>
 
       {/* Sidebar */}
       <div className="hidden w-[280px] shrink-0 lg:block">
         <DocSidebar
           docs={docs}
-          onUploadClick={() => fileInputRef.current?.click()}
+          onUploadClick={openFilePicker}
           onRemove={removeDoc}
         />
       </div>
