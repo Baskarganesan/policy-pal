@@ -205,7 +205,7 @@ function Index() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-background lg:flex-row">
+    <div className="flex h-[100dvh] w-full flex-col bg-background lg:flex-row overflow-hidden">
       <Toaster richColors position="top-center" />
       <input
         ref={fileInputRef}
@@ -222,23 +222,23 @@ function Index() {
       />
 
       {/* Mobile top bar */}
-      <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 lg:hidden">
+      <header className="flex shrink-0 items-center justify-between border-b border-border bg-card px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--gradient-primary)]">
             <FileText className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <span className="text-sm font-semibold">PolicyLens</span>
         </div>
-        <label
-          htmlFor={fileInputId}
+        <button
+          type="button"
           onClick={openFilePicker}
-          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
+          className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground active:opacity-90"
         >
           + Policy
-        </label>
+        </button>
       </header>
 
-      {/* Sidebar */}
+      {/* Sidebar — desktop */}
       <div className="hidden w-[280px] shrink-0 lg:block">
         <DocSidebar
           docs={docs}
@@ -247,9 +247,9 @@ function Index() {
         />
       </div>
 
-      {/* Mobile docs strip */}
+      {/* Mobile/tablet docs strip */}
       {docs.length > 0 && (
-        <div className="border-b border-border bg-card px-3 py-2 lg:hidden">
+        <div className="shrink-0 border-b border-border bg-card px-3 py-2 lg:hidden">
           <div className="flex gap-2 overflow-x-auto">
             {docs.map((d) => (
               <div
@@ -275,7 +275,7 @@ function Index() {
         </div>
       )}
 
-      <main className="min-w-0 flex-1">
+      <main className="min-h-0 min-w-0 flex-1">
         <ChatPanel
           messages={messages}
           isReady={isReady}
@@ -287,13 +287,13 @@ function Index() {
       </main>
 
       {/* Inspector — desktop */}
-      <div className="hidden w-[360px] shrink-0 lg:block">
+      <div className="hidden w-[340px] shrink-0 xl:w-[360px] lg:block">
         <ChunkInspector chunk={activeChunk} onClose={() => setActiveChunk(null)} />
       </div>
 
       {/* Inspector — mobile drawer */}
       {mobileInspectorOpen && activeChunk && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-card lg:hidden">
+        <div className="fixed inset-0 z-50 flex flex-col bg-card lg:hidden animate-in slide-in-from-bottom duration-200">
           <ChunkInspector
             chunk={activeChunk}
             onClose={() => setMobileInspectorOpen(false)}

@@ -48,14 +48,14 @@ export function ChatPanel({
 
   return (
     <div className="flex h-full flex-col bg-[var(--gradient-subtle)]">
-      <div className="flex items-center justify-between border-b border-border bg-card px-6 py-4">
-        <div>
+      <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-4 py-3 sm:px-6 sm:py-4">
+        <div className="min-w-0">
           <h2 className="text-sm font-semibold tracking-tight">Policy Q&A</h2>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="hidden text-[11px] text-muted-foreground sm:block">
             Answers grounded strictly in your uploaded documents.
           </p>
         </div>
-        <div className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+        <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] uppercase tracking-wider text-muted-foreground">
           <span
             className={cn(
               "h-1.5 w-1.5 rounded-full",
@@ -66,7 +66,7 @@ export function ChatPanel({
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 sm:px-8">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 sm:px-8 sm:py-6">
         {messages.length === 0 ? (
           <EmptyState
             isReady={isReady}
@@ -86,7 +86,7 @@ export function ChatPanel({
         )}
       </div>
 
-      <div className="border-t border-border bg-card px-4 py-4 sm:px-8">
+      <div className="shrink-0 border-t border-border bg-card px-3 py-3 sm:px-8 sm:py-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="mx-auto max-w-3xl">
           <div className="flex items-end gap-2 rounded-xl border border-border bg-background p-2 shadow-[var(--shadow-soft)] focus-within:border-primary/40 focus-within:shadow-[var(--shadow-elegant)] transition-[var(--transition-smooth)]">
             <Textarea
@@ -137,19 +137,19 @@ function EmptyState({
   onPick: (q: string) => void;
 }) {
   return (
-    <div className="mx-auto flex max-w-2xl flex-col items-center pt-12 text-center">
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gradient-primary)] shadow-[var(--shadow-elegant)]">
+    <div className="mx-auto flex max-w-2xl flex-col items-center pt-6 text-center sm:pt-12">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--gradient-primary)] shadow-[var(--shadow-elegant)] sm:mb-5 sm:h-14 sm:w-14">
         <Sparkles className="h-6 w-6 text-primary-foreground" />
       </div>
-      <h3 className="text-xl font-semibold tracking-tight">
+      <h3 className="text-lg font-semibold tracking-tight sm:text-xl">
         Ask anything about your policy
       </h3>
-      <p className="mt-2 max-w-md text-sm text-muted-foreground">
+      <p className="mt-2 max-w-md text-[13px] text-muted-foreground sm:text-sm">
         Every answer is retrieved from the document, cites the exact clause,
         and surfaces the source so you can verify before acting.
       </p>
 
-      <div className="mt-8 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+      <div className="mt-6 grid w-full grid-cols-1 gap-2 sm:mt-8 sm:grid-cols-2">
         {SAMPLE_QUESTIONS.map((q) => (
           <button
             key={q}
@@ -189,7 +189,7 @@ function MessageBubble({
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-[var(--shadow-soft)]">
+        <div className="max-w-[85%] break-words rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground shadow-[var(--shadow-soft)]">
           {message.content}
         </div>
       </div>
@@ -198,7 +198,7 @@ function MessageBubble({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="rounded-2xl rounded-bl-sm border border-border bg-card px-5 py-4 shadow-[var(--shadow-soft)]">
+      <div className="rounded-2xl rounded-bl-sm border border-border bg-card px-4 py-3 shadow-[var(--shadow-soft)] sm:px-5 sm:py-4">
         {message.error ? (
           <div className="flex items-start gap-2 text-sm text-destructive">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
