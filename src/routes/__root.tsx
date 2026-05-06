@@ -44,6 +44,12 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "PolicyLens — Insurance Policy Q&A" },
+      { name: "description", content: "Policy Pal is an AI-powered mobile and web application for analyzing insurance documents." },
+      { property: "og:description", content: "Policy Pal is an AI-powered mobile and web application for analyzing insurance documents." },
+      { name: "twitter:description", content: "Policy Pal is an AI-powered mobile and web application for analyzing insurance documents." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d7a6e875-8d58-41d9-980a-7940fdc3ff38/id-preview-f39d309f--6a88ce22-38b9-41e4-a61f-6a298ef9b640.lovable.app-1778046770683.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d7a6e875-8d58-41d9-980a-7940fdc3ff38/id-preview-f39d309f--6a88ce22-38b9-41e4-a61f-6a298ef9b640.lovable.app-1778046770683.png" },
     ],
     links: [
       {
