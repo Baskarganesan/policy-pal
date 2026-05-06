@@ -1,15 +1,58 @@
-import { supabase } from "@/integrations/supabase/client";
-
 const FUNCTIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 const PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
+// Local hashed TF-IDF-ish embeddings. The Lovable AI Gateway does not expose
+// an embeddings endpoint for every workspace, so we compute deterministic
+// bag-of-words vectors in the browser. Cosine similarity over these vectors
+// gives reasonable lexical retrieval for clause-level Q&A without any
+// network call or API key.
+const EMBED_DIM = 512;
+
+function hashToken(token: string): number {
+  // FNV-1a 32-bit
+  let h = 0x811c9dc5;
+  for (let i = 0; i < token.length; i++) {
+    h ^= token.charCodeAt(i);
+    h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+  }
+  return h >>> 0;
+}
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((t) => t.length > 1 && t.length < 32);
+}
+
+function embedOne(text: string): number[] {
+  const vec = new Array<number>(EMBED_DIM).fill(0);
+  const tokens = tokenize(text);
+  if (tokens.length === 0) return vec;
+  for (const tok of tokens) {
+    const h = hashToken(tok);
+    const idx = h % EMBED_DIM;
+    const sign = (h >> 16) & 1 ? 1 : -1;
+    vec[idx] += sign;
+    // bigrams for a bit more discrimination
+  }
+  for (let i = 0; i < tokens.length - 1; i++) {
+    const h = hashToken(tokens[i] + "_" + tokens[i + 1]);
+    const idx = h % EMBED_DIM;
+    const sign = (h >> 16) & 1 ? 1 : -1;
+    vec[idx] += sign * 0.5;
+  }
+  // L2 normalize
+  let norm = 0;
+  for (const v of vec) norm += v * v;
+  norm = Math.sqrt(norm) || 1;
+  for (let i = 0; i < vec.length; i++) vec[i] /= norm;
+  return vec;
+}
+
 export async function embedTexts(texts: string[]): Promise<number[][]> {
-  const { data, error } = await supabase.functions.invoke("embed", {
-    body: { texts },
-  });
-  if (error) throw new Error(error.message || "Embedding failed");
-  if (!data?.embeddings) throw new Error("No embeddings returned");
-  return data.embeddings as number[][];
+  return texts.map(embedOne);
 }
 
 export type StreamChatArgs = {
